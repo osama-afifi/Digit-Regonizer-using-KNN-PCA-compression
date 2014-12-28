@@ -39,7 +39,7 @@ m = size(X, 1);
 sel = randperm(size(X, 1));
 sel = sel(1:100);
 fprintf('Visualize Data ...\n')
-%displayData(X(sel, :));
+displayData(X(sel, :));
 
 fprintf('Program paused. Press enter to continue.\n');
 pause;
@@ -106,7 +106,7 @@ sample_no = 5;
 sample_data = Z(sample_no,:);
 k = 10;
 classes = 10;
-pred = KNN(sample_data,Z, k, classes);
+pred = KNN(sample_data,Z,y, k, classes);
 pred(pred==10) = 0;
 fprintf('\nPredicted Digit: %d\n', pred);
 supposedVal = y(sample_no);

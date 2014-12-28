@@ -1,4 +1,4 @@
-function  pred  = KNN( sample , X , K, classes )
+function  pred  = KNN( sample , X , y,  K, classes )
 
 featureSize = size(X,2);
 n = size(X,1);
@@ -14,15 +14,15 @@ for i = 1:n;
     tempVec(i,2) = i;
 end;
 
-sortrows(tempVec,1);
+sortedVec = sortrows(tempVec,1);
 
 KN = zeros(n);
-KN = tempVec(1:K,2);
+KN = sortedVec(1:K,2);
 
 votes = zeros(classes,1);
 
 for i = 1:K;
-    votes(KN(i),1) = votes(KN(i),1)+1;
+    votes(y(KN(i)),1) = votes(y(KN(i)),1)+1;
 end;
 
 [~,pred] = max(votes);

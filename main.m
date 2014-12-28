@@ -39,7 +39,7 @@ m = size(X, 1);
 sel = randperm(size(X, 1));
 sel = sel(1:100);
 fprintf('Visualize Data ...\n')
-displayData(X(sel, :));
+%displayData(X(sel, :));
 
 fprintf('Program paused. Press enter to continue.\n');
 pause;
@@ -50,17 +50,17 @@ fprintf('.................... Phase 2 .......................\n')
 
 fprintf('\nRunning PCA on example dataset.\n\n');
 %  Before running PCA, it is important to first normalize X
-%[X_norm, mu, sigma] = featureNormalize(X);
 X_norm = X;
+%[X_norm, mu, sigma] = featureNormalize(X);
 %  Run PCA
 [U, S] = pca(X_norm);
 
 %  Draw the eigenvectors centered at mean of data. These lines show the
 %  directions of maximum variations in the dataset.
-hold on;
-drawLine(mu, mu + 1.5 * S(1,1) * U(:,1)', '-k', 'LineWidth', 2);
-drawLine(mu, mu + 1.5 * S(2,2) * U(:,2)', '-k', 'LineWidth', 2);
-hold off;
+%hold on;
+%drawLine(mu, mu + 1.5 * S(1,1) * U(:,1)', '-k', 'LineWidth', 2);
+%drawLine(mu, mu + 1.5 * S(2,2) * U(:,2)', '-k', 'LineWidth', 2);
+%hold off;
 
 fprintf('Top eigenvector: \n');
 fprintf(' U(:,1) = %f %f \n', U(1,1), U(2,1));
@@ -75,24 +75,24 @@ fprintf('.................... Phase 3 .......................\n')
 fprintf('\nDimension reduction on example dataset.\n\n');
 
 %  Plot the normalized dataset (returned from pca)
-plot(X_norm(:, 1), X_norm(:, 2), 'bo');
-axis([-4 3 -4 3]); axis square
+%plot(X_norm(:, 1), X_norm(:, 2), 'bo');
+%axis([-4 3 -4 3]); axis square
 
 %  Project the data onto K dimensions
-K = 1;
+K = 5;
 Z = projectData(X_norm, U, K);
 fprintf('Projection of the first example: %f\n', Z(1));
 
-X_rec  = recoverData(Z, U, K);
-fprintf('Approximation of the first example: %f %f\n', X_rec(1, 1), X_rec(1, 2));
+%X_rec  = recoverData(Z, U, K);
+%fprintf('Approximation of the first example: %f %f\n', X_rec(1, 1), X_rec(1, 2));
 
 %  Draw lines connecting the projected points to the original points
-hold on;
-plot(X_rec(:, 1), X_rec(:, 2), 'ro');
-for i = 1:size(X_norm, 1)
-    drawLine(X_norm(i,:), X_rec(i,:), '--k', 'LineWidth', 1);
-end
-hold off
+%hold on;
+%plot(X_rec(:, 1), X_rec(:, 2), 'ro');
+%for i = 1:size(X_norm, 1)
+%    drawLine(X_norm(i,:), X_rec(i,:), '--k', 'LineWidth', 1);
+%end
+%hold off
 
 fprintf('Program paused. Press enter to continue.\n');
 pause;
@@ -102,16 +102,23 @@ pause;
 %  we would like to use it to predict the labels of the training set using KNN
 
 fprintf('.................... Phase 4 .......................\n')
-sample_no = 1;
-sample_data = X(sample_no,:);
-pred = KNN(X, sample_data);
-fprintf('\nPredicted Digit: %d\n', pred(0) == y);
+sample_no = 5;
+sample_data = Z(sample_no,:);
+k = 10;
+classes = 10;
+pred = KNN(sample_data,Z, k, classes);
+pred(pred==10) = 0;
+fprintf('\nPredicted Digit: %d\n', pred);
+supposedVal = y(sample_no);
+supposedVal(supposedVal==10) = 0;
+fprintf('\nSupposed Digit: %d\n', y(sample_no));
 
 
 %% ================= Part 5: Calculating Accuracy =================
 
-fprintf('.................... Phase 5 .......................\n')
-
-pred = KNN(X, sample_data);
-fprintf('\nTraining Set Accuracy: %f\n', mean(double(pred == y)) * 100);
+%fprintf('.................... Phase 5 .......................\n')
+%k = 10;
+%classes = 10;
+%pred = KNN(X, sample_data, k, classes);
+%fprintf('\nTraining Set Accuracy: %f\n', mean(double(pred == y)) * 100);
 

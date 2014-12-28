@@ -14,14 +14,15 @@ for i = 1:n;
     tempVec(i,2) = i;
 end;
 
-sort(tempVec);
+sortrows(tempVec,1);
 
+KN = zeros(n);
 KN = tempVec(1:K,2);
 
-votes = zeros(classes);
+votes = zeros(classes,1);
 
 for i = 1:K;
-    votes(KN(i)) = votes(KN(i))+1;
+    votes(KN(i),1) = votes(KN(i),1)+1;
 end;
 
 [~,pred] = max(votes);
